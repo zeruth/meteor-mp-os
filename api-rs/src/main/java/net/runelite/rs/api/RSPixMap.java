@@ -7,7 +7,7 @@ import net.runelite.mapping.Import;
 import java.awt.event.KeyEvent;
 
 public interface RSPixMap extends PixMap {
-    @Import("pixels")
+    @Import("data")
     int[] getPixels();
 
     @Import("width")

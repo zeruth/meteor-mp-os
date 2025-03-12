@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
-import client.events.DrawFinished
 import compose.icons.LineAwesomeIcons
 import compose.icons.lineawesomeicons.CompressArrowsAltSolid
 import compose.icons.lineawesomeicons.ExpandArrowsAltSolid
@@ -48,6 +47,7 @@ import meteor.platform.desktop.ui.MeteorWindow.stretchToggleButton
 import meteor.platform.desktop.ui.MeteorWindow.windowState
 import meteor.platform.desktop.ui.buttons.FullscreenToggleButton
 import meteor.platform.desktop.ui.buttons.StretchToggleButton
+import net.runelite.api.events.DrawFinished
 import java.awt.Dimension
 
 object GameView {
@@ -77,31 +77,31 @@ object GameView {
     @Composable
     fun RowScope.GameViewContainer(src: ImageBitmap) {
         var mod = Modifier
-            .defaultMinSize(789.dp, 532.dp)
+            .defaultMinSize(765.dp, 503.dp)
             .weight(1f)
             .onSizeChanged { newSize ->
                 if (fixedState.value) {
                     if (newSize.width < 788) {
-                        val adjustWidth = (789 - newSize.width)
+                        val adjustWidth = (765 - newSize.width)
                         fixedWindowSize = Dimension((fixedWindowSize.width + adjustWidth), fixedWindowSize.height)
                     }
                     if (newSize.height < 531) {
-                        val adjustHeight = (532 - newSize.height)
+                        val adjustHeight = (503 - newSize.height)
                         fixedWindowSize = Dimension((fixedWindowSize.width), fixedWindowSize.height + adjustHeight)
                     }
                     if (newSize.width > 790) {
-                        val adjustWidth = (newSize.width - 789)
+                        val adjustWidth = (newSize.width - 765)
                         fixedWindowSize = Dimension((fixedWindowSize.width - adjustWidth), fixedWindowSize.height)
                     }
                     if (newSize.height >  533) {
-                        val adjustHeight = (newSize.height - 532)
+                        val adjustHeight = (newSize.height - 503)
                         fixedWindowSize = Dimension((fixedWindowSize.width), fixedWindowSize.height - adjustHeight)
                     }
-                    fixedWindowSize = Dimension(fixedWindowSize.width.coerceAtLeast(789), fixedWindowSize.height.coerceAtLeast(532))
+                    fixedWindowSize = Dimension(fixedWindowSize.width.coerceAtLeast(765), fixedWindowSize.height.coerceAtLeast(503))
                     resetWindowSize()
                 }
-            scaleX = if (stretchedMode.value) (789f / newSize.width) else 1f
-            scaleY = if (stretchedMode.value) (532f / newSize.height) else 1f
+            scaleX = if (stretchedMode.value) (765f / newSize.width) else 1f
+            scaleY = if (stretchedMode.value) (503f / newSize.height) else 1f
         }
 
         if (stretchedMode.value) {
@@ -145,9 +145,9 @@ object GameView {
             detectDragGestures(onDragStart = {
                 sendLeftClick(it.x.toInt(), it.y.toInt(), false)
             }, onDragCancel = {
-                clientInstance.`mouseReleased$api`(false)
+                clientInstance.mouseReleased()
             }, onDragEnd = {
-                clientInstance.`mouseReleased$api`(false)
+                clientInstance.mouseReleased()
             }) { change, dragAmount ->
                 sendMouseMove(change.position.x.toInt(), change.position.y.toInt())
             }
@@ -160,9 +160,9 @@ object GameView {
             detectTapGestures(matcher = PointerMatcher.mouse(PointerButton.Secondary), onTap = { offset ->
                 val adjustedX = (offset.x * scaleX)
                 val adjustedY = (offset.y * scaleY)
-                clientInstance.`mouseMoved$api`(adjustedX.toInt(), adjustedY.toInt())
-                clientInstance.`mousePressed$api`(adjustedX.toInt(), adjustedY.toInt(), 3, false)
-                clientInstance.`mouseReleased$api`(false)
+                clientInstance.mouseMoved(adjustedX.toInt(), adjustedY.toInt())
+                clientInstance.mousePressed(adjustedX.toInt(), adjustedY.toInt(), true)
+                clientInstance.mouseReleased()
             })
         }
     }
@@ -242,10 +242,10 @@ object GameView {
                         }
                         return@onKeyEvent true
                     }
-                    clientInstance.`keyPressed$api`(it)
+                    clientInstance.keyPressed(it)
                 }
                 if (keyEvent.type == KeyEventType.KeyUp) {
-                    clientInstance.`keyReleased$api`(it)
+                    clientInstance.keyReleased(it)
                 }
             }
             true
@@ -256,15 +256,15 @@ object GameView {
         val offset = Offset(x.toFloat(), y.toFloat())
         val adjustedX = (offset.x * scaleX)
         val adjustedY = (offset.y * scaleY)
-        clientInstance.`mouseMoved$api`(adjustedX.toInt(), adjustedY.toInt())
+        clientInstance.mouseMoved(adjustedX.toInt(), adjustedY.toInt())
     }
 
     fun sendLeftClick(x: Int, y: Int, release: Boolean = true) {
         val adjustedX = (x * scaleX)
         val adjustedY = (y * scaleY)
-        clientInstance.`mouseMoved$api`(adjustedX.toInt(), adjustedY.toInt())
-        clientInstance.`mousePressed$api`(adjustedX.toInt(), adjustedY.toInt(), 1, false)
+        clientInstance.mouseMoved(adjustedX.toInt(), adjustedY.toInt())
+        clientInstance.mousePressed(adjustedX.toInt(), adjustedY.toInt(), false)
         if (release)
-            clientInstance.`mouseReleased$api`(false)
+            clientInstance.mouseReleased()
     }
 }

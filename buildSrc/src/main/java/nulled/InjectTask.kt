@@ -24,6 +24,7 @@ open class InjectTask : DefaultTask() {
     @Throws(IOException::class)
     fun inject() {
         try {
+            Injector.report.clear()
             Injector.api = api
             Injector.mixinsFile = mixins
             Injector.target = target

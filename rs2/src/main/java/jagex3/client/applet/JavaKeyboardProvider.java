@@ -14,7 +14,7 @@ import java.awt.event.KeyListener;
 public class JavaKeyboardProvider implements KeyListener, FocusListener {
 
 	@ObfuscatedName("az.r")
-	public static JavaKeyboardProvider field460 = new JavaKeyboardProvider();
+	public static JavaKeyboardProvider keyboardProvider = new JavaKeyboardProvider();
 
 	@ObfuscatedName("az.cu")
 	public static boolean[] actionKey = new boolean[112];
@@ -58,29 +58,29 @@ public class JavaKeyboardProvider implements KeyListener, FocusListener {
 	@ObfuscatedName("n.r(Ljava/awt/Component;I)V")
 	public static void method53(Component arg0) {
 		arg0.setFocusTraversalKeysEnabled(false);
-		arg0.addKeyListener(field460);
-		arg0.addFocusListener(field460);
+		arg0.addKeyListener(keyboardProvider);
+		arg0.addFocusListener(keyboardProvider);
 	}
 
 	@ObfuscatedName("cw.d(Ljava/awt/Component;B)V")
 	public static void method1143(Component arg0) {
-		arg0.removeKeyListener(field460);
-		arg0.removeFocusListener(field460);
+		arg0.removeKeyListener(keyboardProvider);
+		arg0.removeFocusListener(keyboardProvider);
 		field419 = -1;
 	}
 
 	@ObfuscatedName("dw.l(I)V")
 	public static void method1502() {
-		if (field460 != null) {
-			JavaKeyboardProvider var0 = field460;
+		if (keyboardProvider != null) {
+			JavaKeyboardProvider var0 = keyboardProvider;
 			synchronized (var0) {
-				field460 = null;
+				keyboardProvider = null;
 			}
 		}
 	}
 
 	public static void imethod4() {
-		JavaKeyboardProvider var4 = field460;
+		JavaKeyboardProvider var4 = keyboardProvider;
 		synchronized (var4) {
 			idleCycles++;
 			field479 = field424;
@@ -105,7 +105,7 @@ public class JavaKeyboardProvider implements KeyListener, FocusListener {
 	}
 
 	public final synchronized void keyPressed(KeyEvent arg0) {
-		if (field460 == null) {
+		if (keyboardProvider == null) {
 			return;
 		}
 		idleCycles = 0;
@@ -140,8 +140,40 @@ public class JavaKeyboardProvider implements KeyListener, FocusListener {
 		}
 	}
 
+	public final synchronized void keyPressed(int arg0) {
+		if (keyboardProvider == null) {
+			return;
+		}
+		idleCycles = 0;
+		int var2 = arg0;
+		int var3;
+		if (var2 >= 0 && var2 < field476.length) {
+			var3 = field476[var2];
+			if ((var3 & 0x80) != 0) {
+				var3 = -1;
+			}
+		} else {
+			var3 = -1;
+		}
+		if (field419 >= 0 && var3 >= 0) {
+			field474[field419] = var3;
+			field419 = field419 + 1 & 0x7F;
+			if (field445 == field419) {
+				field419 = -1;
+			}
+		}
+		if (var3 >= 0) {
+			int var4 = field480 + 1 & 0x7F;
+			if (field479 != var4) {
+				field478[field480] = var3;
+				field477[field480] = 0;
+				field480 = var4;
+			}
+		}
+	}
+
 	public final synchronized void keyReleased(KeyEvent arg0) {
-		if (field460 != null) {
+		if (keyboardProvider != null) {
 			idleCycles = 0;
 			int var2 = arg0.getKeyCode();
 			int var3;
@@ -161,8 +193,28 @@ public class JavaKeyboardProvider implements KeyListener, FocusListener {
 		arg0.consume();
 	}
 
+	public final synchronized void keyReleased(int arg0) {
+		if (keyboardProvider != null) {
+			idleCycles = 0;
+			int var2 = arg0;
+			int var3;
+			if (var2 >= 0 && var2 < field476.length) {
+				var3 = field476[var2] & 0xFFFFFF7F;
+			} else {
+				var3 = -1;
+			}
+			if (field419 >= 0 && var3 >= 0) {
+				field474[field419] = ~var3;
+				field419 = field419 + 1 & 0x7F;
+				if (field445 == field419) {
+					field419 = -1;
+				}
+			}
+		}
+	}
+
 	public final void keyTyped(KeyEvent arg0) {
-		if (field460 != null) {
+		if (keyboardProvider != null) {
 			char var2 = arg0.getKeyChar();
 			if (var2 != 0 && var2 != 65535 && Cp1252.method767(var2)) {
 				int var3 = field480 + 1 & 0x7F;
@@ -176,11 +228,25 @@ public class JavaKeyboardProvider implements KeyListener, FocusListener {
 		arg0.consume();
 	}
 
+	public final void keyTyped(int arg0) {
+		if (keyboardProvider != null) {
+			char var2 = (char)arg0;
+			if (var2 != 0 && var2 != 65535 && Cp1252.method767(var2)) {
+				int var3 = field480 + 1 & 0x7F;
+				if (field479 != var3) {
+					field478[field480] = -1;
+					field477[field480] = var2;
+					field480 = var3;
+				}
+			}
+		}
+	}
+
 	public final void focusGained(FocusEvent arg0) {
 	}
 
 	public final synchronized void focusLost(FocusEvent arg0) {
-		if (field460 != null) {
+		if (keyboardProvider != null) {
 			field419 = -1;
 		}
 	}
@@ -216,7 +282,7 @@ public class JavaKeyboardProvider implements KeyListener, FocusListener {
 	}
 
 	public static boolean imethod2() {
-		JavaKeyboardProvider var446 = field460;
+		JavaKeyboardProvider var446 = keyboardProvider;
 		synchronized (var446) {
 			if (field479 == field424) {
 				return false;

@@ -29,20 +29,16 @@ import meteor.platform.common.ui.components.sidebar.SidebarComposables
 import meteor.platform.desktop.ui.GameView.GameViewContainer
 import meteor.platform.desktop.ui.GameView.focusRequester
 import meteor.platform.desktop.ui.GameView.stretchedMode
-import meteor.platform.desktop.ui.MapView.mapVisible
 import meteor.platform.desktop.ui.buttons.CloseMeteorButton
-import meteor.platform.desktop.ui.buttons.DiscordStatusButton
 import meteor.platform.desktop.ui.buttons.FpsDisplayButton
 import meteor.platform.desktop.ui.buttons.FullscreenToggleButton
-import meteor.platform.desktop.ui.buttons.MapViewButton
 import meteor.platform.desktop.ui.buttons.StretchToggleButton
-import meteor.platform.desktop.ui.buttons.WorldsButton
 import java.awt.Dimension
 
 object MeteorWindow {
     val sidebarWidth = mutableStateOf(40.dp)
     val configWidth = mutableStateOf(300.dp)
-    var fixedWindowSize = Dimension(789 + sidebarWidth.value.value.toInt(), 532)
+    var fixedWindowSize = Dimension(765 + sidebarWidth.value.value.toInt(), 503)
     var fixedState = mutableStateOf(false)
     val floatingState = WindowState(
         position = WindowPosition(Alignment.Center),
@@ -79,16 +75,13 @@ object MeteorWindow {
     }
 
     val closeMeteorButton = CloseMeteorButton()
-    val discordStatusButton = DiscordStatusButton()
     val fullscreenToggleButton = FullscreenToggleButton()
     val stretchToggleButton = StretchToggleButton()
-    val worldsButton = WorldsButton()
     val fpsButton = FpsDisplayButton()
-    val mapViewButton = MapViewButton()
     val density = mutableFloatStateOf(1f)
     val pendingResize = mutableStateOf(false)
 
-    val platformButtons = mutableStateSetOf(discordStatusButton, worldsButton, mapViewButton, fpsButton, fullscreenToggleButton)
+    val platformButtons = mutableStateSetOf(fpsButton, fullscreenToggleButton)
 
     @Composable
     fun ApplicationScope.MeteorWindow() {
@@ -108,12 +101,8 @@ object MeteorWindow {
                 windowInstance = this.window
                 val finalImage = if (gameImage.value != null) gameImage else loadingImage
                 Row(modifier = Modifier.focusable().focusRequester(focusRequester)) {
-                    if (mapVisible.value) {
-                        MapView.MapView()
-                    } else {
-                        finalImage.value?.let {
-                            GameViewContainer(it)
-                        }
+                    finalImage.value?.let {
+                        GameViewContainer(it)
                     }
                     if (panelOpen.value) {
                         Box(Modifier.fillMaxHeight().width(configWidth.value)) {

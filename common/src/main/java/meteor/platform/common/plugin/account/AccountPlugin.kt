@@ -1,9 +1,9 @@
 package meteor.platform.common.plugin.account
 
-import client.events.ResetCredentials
 import meteor.platform.common.Common.clientInstance
 import meteor.platform.common.events.ConfigChanged
 import meteor.platform.common.plugin.Plugin
+import net.runelite.api.events.ResetCredentials
 import org.rationalityfrontline.kevent.KEVENT
 
 class AccountPlugin : Plugin("Account", cantDisable = true, enabledByDefault = true) {

@@ -3,6 +3,7 @@ package jagex3.graphics;
 import deob.ObfuscatedName;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 @ObfuscatedName("ab")
 public abstract class PixMap {
@@ -17,7 +18,7 @@ public abstract class PixMap {
 	public int height;
 
 	@ObfuscatedName("ab.m")
-	public Image image;
+	public BufferedImage image;
 
 	@ObfuscatedName("ab.d(I)V")
 	public final void bind() {

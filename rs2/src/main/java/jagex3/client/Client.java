@@ -27,6 +27,7 @@ import jagex3.script.ScriptRunner;
 import jagex3.sound.*;
 import jagex3.wordfilter.WordPack;
 import nulled.AppletContext;
+import nulled.Configuration;
 
 import java.awt.*;
 import java.io.IOException;
@@ -3163,14 +3164,26 @@ public class Client extends GameShell {
 			Runtime var8 = Runtime.getRuntime();
 			int var9 = (int) ((var8.totalMemory() - var8.freeMemory()) / 1024L);
 			int var10 = 0xffff00;
-			if (var9 > 32768 && lowMemory) {
-				var10 = 0xff0000;
+			if (Configuration.modifyMemoryDebugText) {
+				int mb = var9 / 1024;
+				if (mb > 32768 && lowMemory) {
+					var10 = 0xff0000;
+				}
+				if (mb > 65536 && !lowMemory) {
+					var10 = 0xff0000;
+				}
+				field1122.drawStringRight("Mem:" + mb + "mb", var6, var11, var10, -1);
+				var7 = var11 + 15;
+			} else {
+				if (var9 > 32768 && lowMemory) {
+					var10 = 0xff0000;
+				}
+				if (var9 > 65536 && !lowMemory) {
+					var10 = 0xff0000;
+				}
+				field1122.drawStringRight("Mem:" + var9 + "k", var6, var11, var10, -1);
+				var7 = var11 + 15;
 			}
-			if (var9 > 65536 && !lowMemory) {
-				var10 = 0xff0000;
-			}
-			field1122.drawStringRight("Mem:" + var9 + "k", var6, var11, var10, -1);
-			var7 = var11 + 15;
 		}
 	}
 

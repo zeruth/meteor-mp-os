@@ -4,6 +4,7 @@ import deob.ObfuscatedName;
 
 import java.awt.*;
 import java.awt.image.*;
+import java.util.Hashtable;
 
 @ObfuscatedName("dm")
 public class AwtPixMap extends PixMap implements ImageProducer, ImageObserver {
@@ -20,13 +21,9 @@ public class AwtPixMap extends PixMap implements ImageProducer, ImageObserver {
 		this.height = arg1;
 		this.data = new int[arg0 * arg1 + 1];
 		this.colorModel = new DirectColorModel(32, 16711680, 65280, 255);
-		this.image = arg2.createImage(this);
-		this.setPixels();
-		arg2.prepareImage(this.image, this);
-		this.setPixels();
-		arg2.prepareImage(this.image, this);
-		this.setPixels();
-		arg2.prepareImage(this.image, this);
+		DataBufferInt buffer = new DataBufferInt(data, data.length);
+		WritableRaster raster = Raster.createWritableRaster(colorModel.createCompatibleSampleModel(width, height), buffer, null);
+		this.image = new BufferedImage(colorModel, raster, false, new Hashtable());
 		this.bind();
 	}
 

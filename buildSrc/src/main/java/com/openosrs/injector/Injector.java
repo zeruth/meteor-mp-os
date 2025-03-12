@@ -60,8 +60,7 @@ public class Injector extends InjectData implements InjectTaskHandler
 		for (String s : report) {
 			log.warn(s);
 		}
-		//the report will stack up sitting in a gradle plugin daemon
-		report.clear();
+
 		save(injector.getVanilla(), outputFile, OutputMode.JAR);
 	}
 

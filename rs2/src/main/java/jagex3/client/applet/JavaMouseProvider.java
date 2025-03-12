@@ -10,7 +10,7 @@ import java.awt.event.*;
 public class JavaMouseProvider implements MouseListener, MouseMotionListener, FocusListener {
 
 	@ObfuscatedName("an.r")
-	public static JavaMouseProvider field491 = new JavaMouseProvider();
+	public static JavaMouseProvider mouseProvider = new JavaMouseProvider();
 
 	@ObfuscatedName("an.d")
 	public static volatile int idleCycles = 0;
@@ -59,9 +59,9 @@ public class JavaMouseProvider implements MouseListener, MouseMotionListener, Fo
 
 	@ObfuscatedName("v.r(Ljava/awt/Component;I)V")
 	public static void addListeners(Component arg0) {
-		arg0.addMouseListener(field491);
-		arg0.addMouseMotionListener(field491);
-		arg0.addFocusListener(field491);
+		arg0.addMouseListener(mouseProvider);
+		arg0.addMouseMotionListener(mouseProvider);
+		arg0.addFocusListener(mouseProvider);
 	}
 
 	@ObfuscatedName("ek.d(II)V")
@@ -70,7 +70,7 @@ public class JavaMouseProvider implements MouseListener, MouseMotionListener, Fo
 	}
 
 	public static void imethod3() {
-		JavaMouseProvider var8 = field491;
+		JavaMouseProvider var8 = mouseProvider;
 		synchronized (var8) {
 			mouseButton = field487;
 			mouseX = field501;
@@ -84,7 +84,7 @@ public class JavaMouseProvider implements MouseListener, MouseMotionListener, Fo
 	}
 
 	public final synchronized void mousePressed(MouseEvent arg0) {
-		if (field491 != null) {
+		if (mouseProvider != null) {
 			idleCycles = 0;
 			field494 = arg0.getX();
 			field495 = arg0.getY();
@@ -102,13 +102,36 @@ public class JavaMouseProvider implements MouseListener, MouseMotionListener, Fo
 		}
 	}
 
+	public final synchronized void mousePressed(int x, int y, boolean isMetaDown) {
+		if (mouseProvider != null) {
+			idleCycles = 0;
+			field494 = x;
+			field495 = y;
+			field496 = MonotonicTime.currentTime();
+			if (isMetaDown) {
+				field485 = 2;
+				field487 = 2;
+			} else {
+				field485 = 1;
+				field487 = 1;
+			}
+		}
+	}
+
 	public final synchronized void mouseReleased(MouseEvent arg0) {
-		if (field491 != null) {
+		if (mouseProvider != null) {
 			idleCycles = 0;
 			field487 = 0;
 		}
 		if (arg0.isPopupTrigger()) {
 			arg0.consume();
+		}
+	}
+
+	public final synchronized void mouseReleased() {
+		if (mouseProvider != null) {
+			idleCycles = 0;
+			field487 = 0;
 		}
 	}
 
@@ -119,7 +142,7 @@ public class JavaMouseProvider implements MouseListener, MouseMotionListener, Fo
 	}
 
 	public final synchronized void mouseEntered(MouseEvent arg0) {
-		if (field491 != null) {
+		if (mouseProvider != null) {
 			idleCycles = 0;
 			field501 = arg0.getX();
 			field493 = arg0.getY();
@@ -127,7 +150,7 @@ public class JavaMouseProvider implements MouseListener, MouseMotionListener, Fo
 	}
 
 	public final synchronized void mouseExited(MouseEvent arg0) {
-		if (field491 != null) {
+		if (mouseProvider != null) {
 			idleCycles = 0;
 			field501 = -1;
 			field493 = -1;
@@ -135,7 +158,7 @@ public class JavaMouseProvider implements MouseListener, MouseMotionListener, Fo
 	}
 
 	public final synchronized void mouseDragged(MouseEvent arg0) {
-		if (field491 != null) {
+		if (mouseProvider != null) {
 			idleCycles = 0;
 			field501 = arg0.getX();
 			field493 = arg0.getY();
@@ -143,10 +166,18 @@ public class JavaMouseProvider implements MouseListener, MouseMotionListener, Fo
 	}
 
 	public final synchronized void mouseMoved(MouseEvent arg0) {
-		if (field491 != null) {
+		if (mouseProvider != null) {
 			idleCycles = 0;
 			field501 = arg0.getX();
 			field493 = arg0.getY();
+		}
+	}
+
+	public final synchronized void mouseMoved(int x, int y) {
+		if (mouseProvider != null) {
+			idleCycles = 0;
+			field501 = x;
+			field493 = y;
 		}
 	}
 
@@ -154,23 +185,23 @@ public class JavaMouseProvider implements MouseListener, MouseMotionListener, Fo
 	}
 
 	public final synchronized void focusLost(FocusEvent arg0) {
-		if (field491 != null) {
+		if (mouseProvider != null) {
 			field487 = 0;
 		}
 	}
 
 	public static void removeListeners(Canvas var2) {
-		var2.removeMouseListener(field491);
-		var2.removeMouseMotionListener(field491);
-		var2.removeFocusListener(field491);
+		var2.removeMouseListener(mouseProvider);
+		var2.removeMouseMotionListener(mouseProvider);
+		var2.removeFocusListener(mouseProvider);
 		field487 = 0;
 	}
 
 	public static void imethod2() {
-		if (field491 != null) {
-			JavaMouseProvider var1 = field491;
+		if (mouseProvider != null) {
+			JavaMouseProvider var1 = mouseProvider;
 			synchronized (var1) {
-				field491 = null;
+				mouseProvider = null;
 			}
 		}
 	}

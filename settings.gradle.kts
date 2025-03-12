@@ -21,13 +21,13 @@ plugins {
 rootProject.name = "Meteor Multiplatform"
 //include(":android")
 //include(":android-awt")
-//include(":api")
-//include(":api-rs")
-//include(":common")
-//include(":desktop")
+include(":api")
+include(":api-rs")
+include(":common")
+include(":desktop")
 include(":eventbus")
 include(":logger")
-//include(":mixins")
+include(":mixins")
 include(":rs2")
 //include(":rs2-mapview")
 

@@ -3,15 +3,14 @@ package meteor.platform.desktop
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
-import client.Client
-import client.Client.RSA_MODULUS
-import client.events.DrawFinished
-import jagex2.client.Configuration
-import jagex2.client.GameShell
+import jagex3.client.Client
+import jagex3.client.applet.GameShell
 import meteor.platform.common.Common.clientInstance
 import meteor.platform.common.Common.eventbus
 import meteor.platform.common.world.WorldsCommon.worlds
-import sign.signlink
+import net.runelite.api.events.DrawFinished
+import nulled.Configuration
+import java.awt.image.BufferedImage
 import java.net.InetAddress
 
 /**
@@ -28,30 +27,24 @@ object Game {
     val gameImage = mutableStateOf<ImageBitmap?>(null)
     val loadingImage = mutableStateOf<ImageBitmap?>(null)
 
-    val loadingDrawThread = Thread {
-        while (gameImage.value == null) {
-            loadingImage.value = GameShell.image.toComposeImageBitmap()
-            Thread.sleep(1)
-        }
-    }
+    lateinit var bufferedImage : BufferedImage
 
     init {
-        RSA_MODULUS = worlds.first.modulus
         eventbus.subscribe<DrawFinished> {
-            gameImage.value = GameShell.image.toComposeImageBitmap()
+            gameImage.value = GameShell.drawArea.image.toComposeImageBitmap()
         }
     }
 
     fun init() {
+        Configuration.initializeFrame = false
         clientInstance = Client() as net.runelite.api.Client
         clientInstance.setCallbacks(Hooks)
-        Client.nodeId = 10
+/*        Client.nodeId = 10
         Client.portOffset = 0
         Client.setHighMemory()
         Client.members = false
         signlink.startpriv(InetAddress.getByName("localhost"))
-        Configuration.INTERCEPT_GRAPHICS = true
-        clientInstance.`initApplication$api`(789, 532)
-        loadingDrawThread.start()
+        Configuration.INTERCEPT_GRAPHICS = true*/
+        clientInstance.`initApplication$api`(765, 503, 1)
     }
 }

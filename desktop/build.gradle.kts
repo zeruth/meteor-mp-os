@@ -32,7 +32,7 @@ dependencies {
     implementation(project(":api-rs"))
     implementation(project(":eventbus"))
     implementation(files("./lib/injected-client.jar"))
-    implementation(project(":rs2-mapview"))
+    //implementation(project(":rs2-mapview"))
     implementation(project(":logger"))
 
     with(compose) {

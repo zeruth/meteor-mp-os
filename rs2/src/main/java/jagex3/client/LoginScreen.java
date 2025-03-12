@@ -112,10 +112,10 @@ public class LoginScreen {
 	public static String line3Message = "";
 
 	@ObfuscatedName("g.an")
-	public static String username = "";
+	public static String username = "asdasdasd";
 
 	@ObfuscatedName("g.ah")
-	public static String password = "";
+	public static String password = "asdasdasdasd";
 
 	@ObfuscatedName("g.ay")
 	public static int field150 = 0;
@@ -294,8 +294,8 @@ public class LoginScreen {
 			short var17 = 462;
 			if (var8 == 1 && var9 >= var17 - 75 && var9 <= var17 + 75 && var10 >= var16 - 20 && var10 <= var16 + 20) {
 				field151 = 0;
-				username = "";
-				password = "";
+				username = "asdasdasd";
+				password = "asdasdasdasd";
 			}
 			while (JavaKeyboardProvider.imethod2()) {
 				boolean var21 = false;
@@ -1134,8 +1134,8 @@ public class LoginScreen {
 		field144 = new int[32768];
 		field9 = new int[32768];
 		field151 = 0;
-		username = "";
-		password = "";
+		username = "asdasdasd";
+		password = "asdasdasdasd";
 		field160 = false;
 		if (Client.midiVolume == 0) {
 			field142 = true;

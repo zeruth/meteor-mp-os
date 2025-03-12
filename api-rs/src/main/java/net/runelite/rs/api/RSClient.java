@@ -19,12 +19,12 @@ public interface RSClient extends Client, RSGameShell {
     @Import("password")
     void setPassword(String password);
 
-    @Import("ingame")
+/*    @Import("ingame")
     boolean inGame();
 
     @Import("sceneState")
     int getSceneState();
 
     @Import("areaViewport")
-    RSPixMap getAreaViewport();
+    RSPixMap getAreaViewport();*/
 }
