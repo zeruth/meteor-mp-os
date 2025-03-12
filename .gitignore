@@ -1,0 +1,17 @@
+*.iml
+.gradle
+/local.properties
+/.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+/desktop/build
+/buildSrc/build
+*.salive
+
+desktop/lib/injected-client.jar
+
+android/lib/injected-client.jar
