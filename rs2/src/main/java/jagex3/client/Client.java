@@ -26,6 +26,7 @@ import jagex3.script.HookReq;
 import jagex3.script.ScriptRunner;
 import jagex3.sound.*;
 import jagex3.wordfilter.WordPack;
+import nulled.AppletContext;
 
 import java.awt.*;
 import java.io.IOException;
@@ -36,6 +37,12 @@ import java.net.URL;
 
 @ObfuscatedName("client")
 public class Client extends GameShell {
+
+	public static Client client;
+
+	public Client() {
+		client = this;
+	}
 
 	@ObfuscatedName("cd.ad")
 	public static Image progressBar;
@@ -1162,25 +1169,7 @@ public class Client extends GameShell {
 		app.initApplication(765, 503, 1);
 	}
 
-	@Override
-	public URL getCodeBase() {
-		try {
-			if (GameShell.frame != null) {
-				return new URL("http://localhost:7001");
-			}
-		} catch (Exception ignore) {
-		}
-
-		return super.getDocumentBase();
-	}
-
-	@Override
-	public URL getDocumentBase() {
-		return this.getCodeBase();
-	}
-
-	@Override
-	public String getParameter(String name) {
+	public static String getParameter(String name) {
 		if (name.equals(JavConfigParameter.MODEWHAT.id)) {
 			return String.valueOf(ModeWhat.WIP.id);
 		} else if (name.equals(JavConfigParameter.MODEWHERE.id)) {
@@ -1249,7 +1238,7 @@ public class Client extends GameShell {
 			}
 		}
 		setHighMemory();
-		field52 = this.getCodeBase().getHost();
+		field52 = AppletContext.getCodeBase().getHost();
 		SignLinkCacheFolder.imethod1(modewhat.name, 0);
 		this.method1354(765, 503, 1);
 	}
@@ -1441,6 +1430,7 @@ public class Client extends GameShell {
 			LoginScreen.method831();
 		}
 		gameState = state;
+		System.out.println("Set game state to " + gameState);
 	}
 
 	@ObfuscatedName("client.ci(I)V")

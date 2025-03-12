@@ -1,5 +1,7 @@
 package jagex3.client.applet;
 
+import static nulled.Configuration.initializeFrame;
+
 import deob.ObfuscatedName;
 import deob.Settings;
 import jagex3.client.Client;
@@ -10,6 +12,7 @@ import jagex3.graphics.AwtPixMap;
 import jagex3.graphics.BufferedPixMap;
 import jagex3.graphics.PixMap;
 import jagex3.jstring.StringUtil;
+import nulled.AppletContext;
 
 import java.applet.Applet;
 import java.awt.*;
@@ -17,7 +20,7 @@ import java.awt.event.*;
 import java.net.URL;
 
 @ObfuscatedName("dj")
-public abstract class GameShell extends Applet implements Runnable, FocusListener, WindowListener {
+public abstract class GameShell implements Runnable, FocusListener, WindowListener {
 
 	@ObfuscatedName("dj.r")
 	public static SignLink signlink;
@@ -104,15 +107,17 @@ public abstract class GameShell extends Applet implements Runnable, FocusListene
 	public static boolean focus;
 
 	public final void initApplication(int width, int height, int revision) {
-		frame = new Frame();
-		frame.setTitle("Jagex");
-		frame.setResizable(false);
-		frame.setBackground(Color.BLACK);
-		frame.addWindowListener(this);
-		frame.setVisible(true);
-		frame.toFront();
-		Insets insets = frame.getInsets();
-		frame.setSize(width + insets.left + insets.right, height + insets.top + insets.bottom);
+		if (initializeFrame) {
+			frame = new Frame();
+			frame.setTitle("Jagex");
+			frame.setResizable(false);
+			frame.setBackground(Color.BLACK);
+			frame.addWindowListener(this);
+			frame.setVisible(true);
+			frame.toFront();
+			Insets insets = frame.getInsets();
+			frame.setSize(width + insets.left + insets.right, height + insets.top + insets.bottom);
+		}
 
 		this.init();
 	}
@@ -126,7 +131,7 @@ public abstract class GameShell extends Applet implements Runnable, FocusListene
 					this.error("alreadyloaded");
 					return;
 				}
-				this.getAppletContext().showDocument(this.getDocumentBase(), "_self");
+				AppletContext.showDocument(AppletContext.getDocumentBase(), "_self");
 				return;
 			}
 			shell = this;
@@ -139,6 +144,7 @@ public abstract class GameShell extends Applet implements Runnable, FocusListene
 			}
 			signlink.startThread(this, 1);
 		} catch (Exception var5) {
+			var5.printStackTrace();
 			JagException.report(null, var5);
 			this.error("crash");
 		}
@@ -146,18 +152,21 @@ public abstract class GameShell extends Applet implements Runnable, FocusListene
 
 	@ObfuscatedName("dj.g(I)V")
 	public final synchronized void addcanvas() {
-		Container var1;
+		Container var1 = null;
 		if (frame == null) {
-			var1 = this;
+			//TODO: Check back later
+			//var1 = this;
 		} else {
 			var1 = frame;
 		}
 		if (canvas != null) {
 			canvas.removeFocusListener(this);
-			var1.remove(canvas);
+			if (var1 != null)
+				var1.remove(canvas);
 		}
 		canvas = new GameCanvas(this);
-		var1.add(canvas);
+		if (var1 != null)
+			var1.add(canvas);
 		canvas.setSize(canvasWid, canvasHei);
 		canvas.setVisible(true);
 		if (frame == null) {
@@ -179,7 +188,7 @@ public abstract class GameShell extends Applet implements Runnable, FocusListene
 			return true;
 		}
 
-		String var1 = this.getDocumentBase().getHost().toLowerCase();
+		String var1 = AppletContext.getDocumentBase().getHost().toLowerCase();
 		if (var1.equals("jagex.com") || var1.endsWith(".jagex.com")) {
 			return true;
 		} else if (var1.equals("runescape.com") || var1.endsWith(".runescape.com")) {
@@ -232,7 +241,7 @@ public abstract class GameShell extends Applet implements Runnable, FocusListene
 					field1539 = 5;
 				}
 			}
-			this.setFocusCycleRoot(true);
+			AppletContext.setFocusCycleRoot(true);
 			this.addcanvas();
 			int var8 = canvasWid;
 			int var9 = canvasHei;
@@ -280,6 +289,7 @@ public abstract class GameShell extends Applet implements Runnable, FocusListene
 				}
 			}
 		} catch (Exception var24) {
+			var24.printStackTrace();
 			JagException.report(null, (Throwable) var24);
 			this.error("crash");
 		}
@@ -442,7 +452,7 @@ public abstract class GameShell extends Applet implements Runnable, FocusListene
 		this.alreadyerrored = true;
 		System.out.println("error_game_" + arg0);
 		try {
-			this.getAppletContext().showDocument(new URL(this.getCodeBase(), "error_game_" + arg0 + ".ws"), "_self");
+			AppletContext.showDocument(new URL(AppletContext.getCodeBase(), "error_game_" + arg0 + ".ws"), "_self");
 		} catch (Exception var3) {
 		}
 	}

@@ -8,9 +8,9 @@ import java.awt.*;
 public class GameCanvas extends Canvas {
 
 	@ObfuscatedName("fk.r")
-	public Component component;
+	public GameShell component;
 
-	public GameCanvas(Component c) {
+	public GameCanvas(GameShell c) {
 		this.component = c;
 	}
 

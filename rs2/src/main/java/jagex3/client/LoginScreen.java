@@ -13,6 +13,7 @@ import jagex3.jstring.Locale;
 import jagex3.jstring.StringUtil;
 import jagex3.jstring.TextUtil;
 import jagex3.midi.MidiPlayer;
+import nulled.AppletContext;
 
 import java.awt.*;
 import java.net.URL;
@@ -919,7 +920,7 @@ public class LoginScreen {
 		}
 		String var7 = "http://" + var5.host + var6 + "/j" + Client.js;
 		try {
-			arg0.getAppletContext().showDocument(new URL(var7), "_self");
+			AppletContext.showDocument(new URL(var7), "_self");
 		} catch (Exception var9) {
 		}
 	}
