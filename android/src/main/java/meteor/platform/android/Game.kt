@@ -5,17 +5,13 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import client.Client
-import client.Client.RSA_MODULUS
-import client.events.DrawFinished
 import ext.awt.BufferedImageExt.getPixels
-import jagex2.client.Configuration
+import jagex3.client.Client
+import meteor.platform.common.Common
 import meteor.platform.common.Common.clientInstance
 import meteor.platform.common.Common.eventbus
-import meteor.platform.common.world.WorldsCommon.worlds
-import sign.signlink
-import java.lang.Thread.sleep
-import java.net.InetAddress
+import net.runelite.api.events.DrawFinished
+import nulled.Configuration
 
 object Game {
     var receivedDraw = false
@@ -25,7 +21,6 @@ object Game {
 
     //Draws when game reports a frame
     init {
-        RSA_MODULUS = worlds.toTypedArray()[0].modulus
         eventbus.subscribe<DrawFinished> {
             receivedDraw = true
             updateGameImage()
@@ -33,31 +28,16 @@ object Game {
     }
 
     fun start() {
-        Client.isAndroid = true
+        Common.isAndroid = true
+        Configuration.initializeFrame = false
         clientInstance = Client() as net.runelite.api.Client
         clientInstance.callbacks = Hooks
-        Client.nodeId = 10
-        Client.portOffset = 0
-        Client.setHighMemory()
-        Client.members = false
-        Thread {
-            signlink.startpriv(InetAddress.getByName("localhost"))
-        }.start()
-        sleep(500)
-        Configuration.INTERCEPT_GRAPHICS = true
-        clientInstance.`initApplication$api`(789, 532)
-
-        //Draws while loading (stuck in while loop during cache loading with no draw reporting)
-        Thread {
-            while (!receivedDraw) {
-                updateGameImage()
-            }
-        }.start()
+        clientInstance.`initApplication$api`(789, 532, 1)
     }
 
     fun updateGameImage() {
         try {
-            image.value = Bitmap.createBitmap(Client.image.getPixels(), Client.image.width, Client.image.height, Bitmap.Config.RGB_565).asImageBitmap()
+            image.value = Bitmap.createBitmap(Client.drawArea.image.getPixels(), Client.drawArea.image.width, Client.drawArea.image.height, Bitmap.Config.RGB_565).asImageBitmap()
             recentDraws += System.currentTimeMillis()
             val expiredTimes = ArrayList<Long>()
             for (renderTime in recentDraws) {

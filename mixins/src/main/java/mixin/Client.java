@@ -38,7 +38,7 @@ abstract class Client implements RSClient {
 
     @Inject
     @MethodHook("mainredraw")
-    public void mainredraw$post() {
+    public void mainredraw$tail() {
         callbacks.post(DrawFinished.INSTANCE);
     }
 

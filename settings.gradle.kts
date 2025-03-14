@@ -19,8 +19,8 @@ plugins {
 }
 
 rootProject.name = "Meteor Multiplatform"
-//include(":android")
-//include(":android-awt")
+include(":android")
+include(":android-awt")
 include(":api")
 include(":api-rs")
 include(":common")

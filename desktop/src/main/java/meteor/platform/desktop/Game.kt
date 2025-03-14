@@ -2,6 +2,7 @@ package meteor.platform.desktop
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.ImageBitmapConfig
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import jagex3.client.Client
 import jagex3.client.applet.GameShell

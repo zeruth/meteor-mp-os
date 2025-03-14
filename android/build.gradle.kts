@@ -70,7 +70,6 @@ dependencies {
     implementation(project(":logger"))
     implementation(project(":android-awt"))
     implementation(project(":eventbus"))
-    implementation(project(":rs2-mapview"))
     implementation(files("./lib/injected-client.jar"))
 
     with(libs) {

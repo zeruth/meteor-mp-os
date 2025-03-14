@@ -33,9 +33,9 @@ import meteor.platform.common.Common.clientInstance
 import meteor.platform.common.Common.eventbus
 import meteor.platform.common.ui.UI.filterQuality
 import meteor.platform.android.input.KeyboardController.handleKeyEvent
-import meteor.platform.android.input.KeyboardController.keyboardController
 import meteor.platform.android.ui.cameracontrols.CameraControls.CameraControls
 import meteor.platform.android.ui.cameracontrols.CameraControls.resetKeys
+import net.runelite.api.events.DrawFinished
 
 /**
  * This panel will contain the game view & compose overlays eventually
@@ -66,7 +66,7 @@ object GamePanel {
     var waitTapFrame = 0
 
     init {
-        eventbus.subscribe<client.events.DrawFinished>(priority = Int.MAX_VALUE) {
+        eventbus.subscribe<DrawFinished>(priority = Int.MAX_VALUE) {
             if (mouseDown)
                 waitFrame += 1
             else
@@ -76,43 +76,43 @@ object GamePanel {
                 waitTapFrame += 1
             }
         }
-        eventbus.subscribe<client.events.DrawFinished> {
+        eventbus.subscribe<DrawFinished> {
             pendingMove?.let {
-                clientInstance.`mouseMoved$api`(it.x, it.y)
+                clientInstance.mouseMoved(it.x, it.y)
                 mouseDown = true
                 pendingMove = null
             }
         }
-        eventbus.subscribe<client.events.DrawFinished> {
+        eventbus.subscribe<DrawFinished> {
             pendingPress?.let {
                 if (!mouseDown || waitFrame == 0)
                     return@let
-                clientInstance.`mousePressed$api`(it.x, it.y, 1, false)
+                clientInstance.mousePressed(it.x, it.y,  false)
                 pendingPress = null
             }
         }
-        eventbus.subscribe<client.events.DrawFinished> {
+        eventbus.subscribe<DrawFinished> {
             pendingTap?.let {
                 if (waitTapFrame == 0)
                     return@let
-                clientInstance.`mousePressed$api`(it.x, it.y, 1, false)
-                clientInstance.`mouseReleased$api`(1, false)
+                clientInstance.mousePressed(it.x, it.y, false)
+                clientInstance.mouseReleased()
                 pendingTap = null
             }
         }
-        eventbus.subscribe<client.events.DrawFinished> {
+        eventbus.subscribe<DrawFinished> {
             pendingHold?.let {
                 if (!mouseDown || waitFrame == 0)
                     return@let
-                clientInstance.`mousePressed$api`(it.x, it.y, 3, false)
-                clientInstance.`mouseReleased$api`(3, false)
+                clientInstance.mousePressed(it.x, it.y, false)
+                clientInstance.mouseReleased()
                 pendingHold = null
             }
         }
-        eventbus.subscribe<client.events.AreaViewportDrawFinished> {
+/*        eventbus.subscribe<AreaViewportDrawFinished> {
             viewportImage.value = Bitmap.createBitmap(clientInstance.areaViewport.pixels, clientInstance.areaViewport.width, clientInstance.areaViewport.height, Bitmap.Config.RGB_565).asImageBitmap()
-        }
-        eventbus.subscribe<client.events.DrawFinished> {
+        }*/
+        eventbus.subscribe<DrawFinished> {
             if (sceneState.intValue != clientInstance.sceneState)
                 sceneState.intValue = clientInstance.sceneState
         }
@@ -228,16 +228,16 @@ object GamePanel {
                         touchScaleY.value = containerSize.value.height.toFloat() / 532
                     }.pointerInteropFilter { change ->
                         resetKeys()
-                        clientInstance.`mouseMoved$api`((change.x / touchScaleX.value).toInt(), (change.y / touchScaleY.value).toInt())
+                        clientInstance.mouseMoved((change.x / touchScaleX.value).toInt(), (change.y / touchScaleY.value).toInt())
                         false
                     }.pointerInput(Unit) {
                         detectDragGestures(onDragStart = {
                             pendingMove = android.graphics.Point(it.x.toInt(), it.y.toInt()).scaled()
                             pendingPress = android.graphics.Point(it.x.toInt(), it.y.toInt()).scaled()
                         }, onDragCancel = {
-                            clientInstance.`mouseReleased$api`()
+                            clientInstance.mouseReleased()
                         }, onDragEnd = {
-                            clientInstance.`mouseReleased$api`()
+                            clientInstance.mouseReleased()
                         }) { change, dragAmount ->
                             pendingMove = android.graphics.Point(change.position.x.toInt(), change.position.y.toInt()).scaled()
                         }

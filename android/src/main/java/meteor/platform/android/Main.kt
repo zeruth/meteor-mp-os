@@ -1,12 +1,10 @@
 package meteor.platform.android
 
-import JinglePlayer
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.Window
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
@@ -18,16 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import client.events.MidiJinglePlay
-import client.events.MidiPlay
-import client.events.MidiStop
-import client.events.WavePlay
-import client.events.WaveReplay
 import ext.android.ComponentActivityExt.setupActivity
-import meteor.platform.android.audio.SongPlayer
-import meteor.platform.android.audio.SoundPlayer
 import meteor.platform.common.Common
-import meteor.platform.common.Common.clientInstance
 import meteor.platform.common.Common.eventbus
 import meteor.platform.common.plugin.PluginManager
 import meteor.platform.android.input.KeyboardController.keyboardController
@@ -35,9 +25,7 @@ import meteor.platform.android.events.BatteryLevelChanged
 import meteor.platform.android.ui.Window.MeteorViewBox
 import meteor.platform.android.ui.batteryfps.BatteryReceiver
 import meteor.platform.common.Configuration
-import org.rationalityfrontline.kevent.KEVENT
 import java.awt.font.sfntly.FontPeer
-import java.io.File
 
 
 class Main : ComponentActivity() {
@@ -52,16 +40,14 @@ class Main : ComponentActivity() {
             return false
         }
 
-        var songPlayer: SongPlayer? = null
-        var jinglePlayer: JinglePlayer? = null
         var lastSong: String? = null
         var muteLoginMusic = false
     }
 
     init {
-        /**
+/*        *//**
          * Subscribe to sounds here so we have access to context
-         */
+         *//*
         KEVENT.subscribe<WavePlay> {
             Thread {
                 preventReplay = true
@@ -128,13 +114,12 @@ class Main : ComponentActivity() {
                     e.printStackTrace()
                 }
             }
-        }
+        }*/
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FontPeer.androidContext = applicationContext
-        mapview.androidContext = applicationContext
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN);

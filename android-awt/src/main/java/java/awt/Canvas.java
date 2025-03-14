@@ -81,6 +81,10 @@ public class Canvas extends Component {
 //        }
     }
 
+    public void repaint() {
+
+    }
+
     Dimension getDefaultMinimumSize() {
         return new Dimension(0, 0);
     }

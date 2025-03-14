@@ -13,6 +13,7 @@ import androidx.compose.ui.awt.awtEventOrNull
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.input.pointer.PointerButton
@@ -22,11 +23,13 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
 import compose.icons.LineAwesomeIcons
 import compose.icons.lineawesomeicons.CompressArrowsAltSolid
+import compose.icons.lineawesomeicons.ExclamationTriangleSolid
 import compose.icons.lineawesomeicons.ExpandArrowsAltSolid
 import compose.icons.lineawesomeicons.LockSolid
 import compose.icons.lineawesomeicons.UnlockSolid
@@ -48,6 +51,7 @@ import meteor.platform.desktop.ui.MeteorWindow.windowState
 import meteor.platform.desktop.ui.buttons.FullscreenToggleButton
 import meteor.platform.desktop.ui.buttons.StretchToggleButton
 import net.runelite.api.events.DrawFinished
+import net.runelite.api.events.ErrorGame
 import java.awt.Dimension
 
 object GameView {
@@ -59,6 +63,7 @@ object GameView {
     val stretchedMode = mutableStateOf(true)
     var fps = mutableIntStateOf(0)
     var recentDraws = ArrayList<Long>()
+    val error = mutableStateOf<String?>(null)
 
     init {
         eventbus.subscribe<DrawFinished> {
@@ -72,11 +77,15 @@ object GameView {
                 recentDraws.remove(expiredTime)
             fps.intValue = recentDraws.size
         }
+        eventbus.subscribe<ErrorGame> {
+            error.value = it.data.type
+        }
     }
 
     @Composable
     fun RowScope.GameViewContainer(src: ImageBitmap) {
         var mod = Modifier
+            .background(Color.Black)
             .defaultMinSize(765.dp, 503.dp)
             .weight(1f)
             .onSizeChanged { newSize ->
@@ -109,7 +118,17 @@ object GameView {
         }
 
         Box(mod) {
-            GameViewImage(src)
+            if (error.value != null) {
+                Column(modifier = Modifier.align(Alignment.Center)) {
+                    Image(LineAwesomeIcons.ExclamationTriangleSolid, "", colorFilter = ColorFilter.tint(
+                        Color.Red), modifier = Modifier.align(
+                        Alignment.CenterHorizontally))
+                    Text("error_game_${error.value!!}", color = Color.Red, fontSize = 20.sp, modifier = Modifier.align(
+                        Alignment.CenterHorizontally))
+                }
+            } else {
+                GameViewImage(src)
+            }
         }
     }
 

@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import client.events.DrawFinished
 import compose.icons.LineAwesomeIcons
 import compose.icons.lineawesomeicons.*
 import meteor.platform.common.Common.clientInstance
@@ -19,6 +18,7 @@ import meteor.platform.common.Common.eventbus
 import meteor.platform.common.ext.kotlin.MutableStateExt.toggle
 import meteor.platform.common.ui.Colors
 import meteor.platform.android.ui.GamePanel.containerSize
+import net.runelite.api.events.DrawFinished
 import java.awt.event.KeyEvent
 
 object CameraControls {

@@ -16,16 +16,13 @@ import meteor.platform.android.ui.GamePanel.Game
 import meteor.platform.common.ui.components.sidebar.SidebarComposables.Sidebar
 import meteor.platform.common.ui.components.sidebar.UISide
 import meteor.platform.android.input.KeyboardButton
-import meteor.platform.android.ui.map.MapView
-import meteor.platform.android.ui.map.MapViewButton
-import meteor.platform.android.ui.worlds.WorldsButton
 
 /**
  * The main entry point to the Compose UI
  */
 object Window {
 
-    val sidebarButtons = arrayOf(WorldsButton(), MapViewButton(), KeyboardButton(), BatteryFpsDisplayButton())
+    val sidebarButtons = arrayOf(KeyboardButton(), BatteryFpsDisplayButton())
 
     @Composable
     fun BoxScope.MeteorViewBox() {
@@ -35,10 +32,7 @@ object Window {
             when (uiSide.value) {
                 UISide.RIGHT -> {
                     Box(Modifier.fillMaxHeight().weight(1f).background(Color.Black)) {
-                        if (MapView.mapVisible.value)
-                            MapView.MapView()
-                        else
-                            Game()
+                        Game()
                     }
                     if (panelOpen.value) {
                         Box(Modifier.fillMaxHeight().width(configWidth.value)) {
@@ -60,10 +54,7 @@ object Window {
                         }
                     }
                     Box(Modifier.fillMaxHeight().weight(1f)) {
-                        if (MapView.mapVisible.value)
-                            MapView.MapView()
-                        else
-                            Game()
+                        Game()
                     }
                 }
             }

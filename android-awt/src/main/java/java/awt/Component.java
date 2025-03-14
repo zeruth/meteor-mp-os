@@ -26,8 +26,37 @@ public class Component {
         reshape(x, y, width, height);
     }
 
+    public void setVisible(boolean isVisible) {
+
+    }
+
+    public void requestFocus() {
+
+    }
+
+    public void setFocusTraversalKeysEnabled(boolean b) {
+
+    }
+
+    public void addKeyListener(Object o) {
+
+    }
+
+    public void addFocusListener(Object o) {
+
+    }
+
+    public void setLocation(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public void reshape(int x, int y, int width, int height) {
 
+    }
+
+    public void setSize(int width, int height) {
+        reshape(x, y, width, height);
     }
 
     public Graphics getGraphics() {
